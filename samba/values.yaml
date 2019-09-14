@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 replicaCount: 1
 image:
-  repository: samnco/samba
+  repository: alexandreroman/rpi-samba
   tag: latest
   pullPolicy: IfNotPresent
 service:
@@ -28,29 +28,7 @@ resources:
 
 nodeSelector: {}
 
-hostNetwork: false
+hostNetwork: true
 
-persistence:
-  # This setup overrides persistence and mounts a hostPath. Use the host path 
-  # as the value
-  hostPath: false
-
-  ## This volume persists generated configuration files, keys, and certs.
-  ##
-  enabled: true
-
-  ## A manually managed Persistent Volume and Claim
-  ## Requires persistence.enabled: true
-  ## If defined, PVC must be created manually before volume will be bound
-  # existingClaim:
-
-  size: 1Gi
-  ## If defined, volume.beta.kubernetes.io/storage-class: <storageClass>
-  ## Default: volume.alpha.kubernetes.io/storage-class: default
-  ##
-  # storageClass:
-  accessMode: ReadWriteOnce
-  ## This volume is used to store git data and other project files.
-  ## ref: https://docs.gitlab.com/omnibus/settings/configuration.html#storing-git-data-in-an-alternative-directory
-  ##
+hostDataDirPath: /data
 

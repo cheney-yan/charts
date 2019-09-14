@@ -23,8 +23,8 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         volumeMounts:
-        - name: shared
-          mountPath: /shared
+        - name: samba-storage
+          mountPath: /data/share
         ports:
         - containerPort: {{ .Values.service.internalSMBPort445 }}
           name: smb445
@@ -51,14 +51,6 @@ spec:
 {{ toYaml .Values.nodeSelector | indent 8 }}
     {{- end }}
       volumes:
-      - name: shared
-      {{- if and .Values.persistence.enabled (not .Values.persistence.hostPath) }}
+      - name: samba-storage
         persistentVolumeClaim:
-          claimName: {{ .Values.persistence.existingClaim | default (include "fullname" .) }}
-      {{- else if and (not .Values.persistence.enabled) .Values.persistence.hostPath }}
-        hostPath: 
-          path: {{ .Values.persistence.hostPath }}
-          type: DirectoryOrCreate
-      {{ else }} 
-        emptyDir: {}
-      {{- end -}}
+          claimName: samba-claim
